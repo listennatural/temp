@@ -34,8 +34,11 @@ export class StartupService {
     // only works with promises
     // https://github.com/angular/angular/issues/15088
     return new Promise(resolve => {
+      // zip 将参数中的数据 组成一个数组,如果是请求,则
       zip(
+        // 通过请求访问本地的静态资源 assets/tmp/i18n/*.json
         this.httpClient.get(`assets/tmp/i18n/${this.i18n.defaultLang}.json`),
+        // 通过请求访问本地的静态资源 assets/tmp/app-data.json  里面有app 数据,菜单数据,用户数据
         this.httpClient.get('assets/tmp/app-data.json'),
       )
         .pipe(
@@ -45,6 +48,7 @@ export class StartupService {
             return [langData, appData];
           }),
         )
+        // 当两个数据加载成功时调用
         .subscribe(
           ([langData, appData]) => {
             // setting language data
@@ -65,7 +69,7 @@ export class StartupService {
             this.titleService.default = '';
             this.titleService.suffix = res.app.name;
           },
-          () => {},
+          () => { },
           () => {
             resolve(null);
           },

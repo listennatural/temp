@@ -306,13 +306,13 @@
       ]
     },
     {
-      "text": "More",
+      "text": "更多",
       "i18n": "menu.more",
       "group": true,
       "hideInBreadcrumb": true,
       "children": [
         {
-          "text": "Report",
+          "text": "报表",
           "i18n": "menu.report",
           "icon": "anticon-cloud",
           "children": [
@@ -325,23 +325,23 @@
           ]
         },
         {
-          "text": "Extras",
+          "text": "扩展",
           "i18n": "menu.extras",
           "link": "/extras",
           "icon": "anticon-link",
           "children": [
             {
-              "text": "Help Center",
+              "text": "帮助中心",
               "link": "/extras/helpcenter",
               "i18n": "menu.extras.helpcenter"
             },
             {
-              "text": "Settings",
+              "text": "设置",
               "link": "/extras/settings",
               "i18n": "menu.extras.settings"
             },
             {
-              "text": "Poi",
+              "text": "门店",
               "link": "/extras/poi",
               "i18n": "menu.extras.poi"
             }
