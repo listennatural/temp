@@ -1,0 +1,3 @@
+使用的是  https://ng.ant.design/components/icon/zh 的图标库,主题风格为 outlined 
+使用时将该页面代码中的 `<i nz-icon nzType="mobile" nzTheme="outline"></i>` nzType 属性值 写在 anticon- 后面,当前例为 anticon-mobile
+如果页面没有显示图标,则前往 src/style-icons-auto.ts 在 import 和 export 中填在 nzType 属性值首字大写+Outline,当前例为 MobileOutline
