@@ -19,7 +19,7 @@ import {
   DelonLocaleService,
   en_US as delonEnUS,
   zh_CN as delonZhCn,
-  zh_TW as delonZhTw,
+  // zh_TW as delonZhTw,
 } from '@delon/theme';
 
 interface LangData {
@@ -41,14 +41,14 @@ const LANGS: { [key: string]: LangData } = {
     delon: delonZhCn,
     abbr: '🇨🇳',
   },
-  'zh-TW': {
-    text: '繁体中文',
-    ng: ngZhTw,
-    zorro: zh_TW,
-    dateFns: df_zh_tw,
-    delon: delonZhTw,
-    abbr: '🇭🇰',
-  },
+  // 'zh-TW': {
+  //   text: '繁体中文',
+  //   ng: ngZhTw,
+  //   zorro: zh_TW,
+  //   dateFns: df_zh_tw,
+  //   delon: delonZhTw,
+  //   abbr: '🇭🇰',
+  // },
   'en-US': {
     text: 'English',
     ng: ngEn,
