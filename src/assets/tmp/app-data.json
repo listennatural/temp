@@ -154,13 +154,13 @@
       ]
     },
     {
-      "text": "Pro",
+      "text": "Antd Pro",
       "i18n": "menu.pro",
       "group": true,
       "hideInBreadcrumb": true,
       "children": [
         {
-          "text": "Form Page",
+          "text": "表单页",
           "i18n": "menu.form",
           "link": "/pro/form",
           "icon": "anticon-edit",
@@ -184,7 +184,7 @@
           ]
         },
         {
-          "text": "List",
+          "text": "列表",
           "i18n": "menu.list",
           "icon": "anticon-appstore",
           "children": [
@@ -226,7 +226,7 @@
           ]
         },
         {
-          "text": "Profile",
+          "text": "详情",
           "i18n": "menu.profile",
           "icon": "anticon-profile",
           "children": [
@@ -244,7 +244,7 @@
           ]
         },
         {
-          "text": "Result",
+          "text": "结果",
           "i18n": "menu.result",
           "icon": "anticon-check-circle",
           "children": [
@@ -261,7 +261,7 @@
           ]
         },
         {
-          "text": "Exception",
+          "text": "异常",
           "i18n": "menu.exception",
           "link": "/",
           "icon": "anticon-exception",
@@ -287,7 +287,7 @@
           ]
         },
         {
-          "text": "Account",
+          "text": "账号",
           "i18n": "menu.account",
           "icon": "anticon-user",
           "children": [
@@ -311,19 +311,6 @@
       "group": true,
       "hideInBreadcrumb": true,
       "children": [
-        {
-          "text": "报表",
-          "i18n": "menu.report",
-          "icon": "anticon-cloud",
-          "children": [
-            {
-              "text": "Relation",
-              "link": "/data-v/relation",
-              "i18n": "menu.report.relation",
-              "reuse": false
-            }
-          ]
-        },
         {
           "text": "扩展",
           "i18n": "menu.extras",
