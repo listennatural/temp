@@ -51,9 +51,15 @@ import {
   UserOutline,
   WeiboCircleOutline,
   MobileOutline,
+  HomeOutline,
+  UnorderedListOutline,
+  CreditCardOutline,
 } from '@ant-design/icons-angular/icons';
 
 export const ICONS_AUTO = [
+  CreditCardOutline,
+  UnorderedListOutline,
+  HomeOutline,
   AlipayCircleOutline,
   ApiOutline,
   AppstoreOutline,

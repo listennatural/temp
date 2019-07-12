@@ -344,44 +344,143 @@
       "children": [
         {
           "text": "功能",
-          "i18n": "menu.dashboard",
-          "icon": "anticon-mobile",
+          "i18n": "menu.system",
+          "icon": "anticon-home",
           "children": [
             {
-              "text": "仪表盘V1",
-              "link": "/dashboard/v1",
-              "i18n": "menu.dashboard.v1"
+              "text": "数据统计",
+              "link": "/system/main",
+              "i18n": "menu.system.main"
             },
             {
-              "text": "分析页",
-              "link": "/dashboard/analysis",
-              "i18n": "menu.dashboard.analysis"
-            },
-            {
-              "text": "监控页",
-              "link": "/dashboard/monitor",
-              "i18n": "menu.dashboard.monitor"
-            },
-            {
-              "text": "工作台",
-              "link": "/dashboard/workplace",
-              "i18n": "menu.dashboard.workplace"
+              "text": "单课程卡管理",
+              "link": "/system/card",
+              "i18n": "menu.system.card"
             }
           ]
         },
         {
-          "text": "快捷菜单",
-          "i18n": "menu.shortcut",
-          "icon": "anticon-rocket",
+          "text": "用户管理",
+          "i18n": "menu.user",
+          "icon": "anticon-user",
           "shortcutRoot": true,
-          "children": []
+          "children": [
+            {
+              "text": "用户列表",
+              "link": "/user/list",
+              "i18n": "menu.user.list"
+            },
+            {
+              "text": "教师列表",
+              "link": "/user/teacher",
+              "i18n": "menu.user.teacher"
+            },
+            {
+              "text": "学员列表",
+              "link": "/user/student",
+              "i18n": "menu.user.student"
+            }
+          ]
         },
         {
-          "text": "小部件",
-          "i18n": "menu.widgets",
-          "link": "/widgets",
-          "icon": "anticon-appstore",
-          "badge": 2
+          "text": "课程管理",
+          "i18n": "menu.course",
+          "icon": "anticon-unordered-list",
+          "shortcutRoot": true,
+          "children": [
+            {
+              "text": "课程大分类",
+              "link": "/course/classify/big",
+              "i18n": "menu.course.classify.big"
+            },
+            {
+              "text": "课程小分类",
+              "link": "/course/classify/small",
+              "i18n": "menu.course.classify.small"
+            },
+            {
+              "text": "课程列表",
+              "link": "/course/list",
+              "i18n": "menu.course.list"
+            }
+          ]
+        },
+        {
+          "text": "广场管理",
+          "i18n": "menu.community",
+          "icon": "anticon-message",
+          "shortcutRoot": true,
+          "children": [
+            {
+              "text": "广场发布列表",
+              "link": "/community/list",
+              "i18n": "menu.community.list"
+            }
+          ]
+        },
+        {
+          "text": "知言卡管理",
+          "i18n": "menu.zhiyan",
+          "icon": "anticon-credit-card",
+          "shortcutRoot": true,
+          "children": [
+            {
+              "text": "知言卡列表",
+              "link": "/zhiyan/list",
+              "i18n": "menu.zhiyan.list"
+            }
+          ]
+        },
+        {
+          "text": "绘本管理",
+          "i18n": "menu.picBook",
+          "icon": "anticon-book",
+          "shortcutRoot": true,
+          "children": [
+            {
+              "text": "绘本列表",
+              "link": "/picBook/list",
+              "i18n": "menu.picBook.list"
+            }
+          ]
+        },
+        {
+          "text": "系统配置",
+          "i18n": "menu.setting",
+          "icon": "anticon-setting",
+          "shortcutRoot": true,
+          "children": [
+            {
+              "text": "成就",
+              "link": "/setting/achievement",
+              "i18n": "menu.setting.achievement"
+            },
+            {
+              "text": "广告",
+              "link": "/setting/advert",
+              "i18n": "menu.setting.advert"
+            },
+            {
+              "text": "签到",
+              "link": "/setting/signIn",
+              "i18n": "menu.setting.signIn"
+            },
+            {
+              "text": "优惠券",
+              "link": "/setting/coupons",
+              "i18n": "menu.setting.coupons"
+            },
+            {
+              "text": "举报原因",
+              "link": "/setting/report",
+              "i18n": "menu.setting.report"
+            },
+            {
+              "text": "系统配置",
+              "link": "/setting/system",
+              "i18n": "menu.setting.system"
+            }
+          ]
         }
       ]
     }

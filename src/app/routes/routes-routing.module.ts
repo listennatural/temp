@@ -45,11 +45,11 @@ const routes: Routes = [
     ],
   },
   // 全屏布局
-  {
-    path: 'data-v',
-    component: LayoutFullScreenComponent,
-    children: [{ path: '', loadChildren: () => import('./data-v/data-v.module').then(m => m.DataVModule) }],
-  },
+  // {
+  //   path: 'data-v',
+  //   component: LayoutFullScreenComponent,
+  //   children: [{ path: '', loadChildren: () => import('./data-v/data-v.module').then(m => m.DataVModule) }],
+  // },
   // passport
   {
     path: 'passport',
@@ -93,4 +93,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class RouteRoutingModule {}
+export class RouteRoutingModule { }
