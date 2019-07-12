@@ -18,6 +18,7 @@ import { UserRegisterResultComponent } from './passport/register-result/register
 // single pages
 import { CallbackComponent } from './callback/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
+import { UserListComponent } from './user/UserList/UserList.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,8 @@ const routes: Routes = [
       { path: 'pro', loadChildren: () => import('./pro/pro.module').then(m => m.ProModule) },
       // Exception
       { path: 'exception', loadChildren: () => import('./exception/exception.module').then(m => m.ExceptionModule) },
+      // user list
+      { path: 'user/list', component: UserListComponent },
     ],
   },
   // 全屏布局
