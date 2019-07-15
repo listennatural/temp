@@ -37,28 +37,19 @@ function getRule(params: any) {
     });
   }
 
-  console.log(params);
-  // console.log(params.statusList);
-  // console.log(params.statusList.length);
-  console.log(params.statusList && params.statusList.length > 0);
-
-  console.log(ret.length);
   if (params.statusList && params.statusList.length > 0) {
-    console.log("filter");
-
     ret = ret.filter(data => {
-      return params.statusList.indexOf(data.status) > -1;
+      return params.statusList === data.status;
     });
   }
-
-  console.log(ret.length);
-
-  // if (params.no) {
-  //   ret = ret.filter(data => data.no.indexOf(params.no) > -1);
-  // }
   return ret;
 }
 
 export const USERLS = {
-  'GET /lt/user/list': (req: MockRequest) => getRule(req.queryString),
+  'POST /lt/user/list': (req: MockRequest) => {
+    console.log("==========");
+    console.log(req.queryString);
+
+    return getRule(req.queryString)
+  },
 };
