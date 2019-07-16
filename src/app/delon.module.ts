@@ -53,6 +53,7 @@ export function fnDelonAuthConfig(): DelonAuthConfig {
   return {
     ...new DelonAuthConfig(),
     token_send_key: 'token',
+    token_send_place: 'url',
     login_url: '/passport/login',
   };
 }
