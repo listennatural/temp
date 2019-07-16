@@ -5,6 +5,7 @@
 const { SpecReporter } = require('jasmine-spec-reporter');
 
 /**
+ * 貌似是用于测试的
  * @type { import("protractor").Config }
  */
 exports.config = {
@@ -16,7 +17,7 @@ exports.config = {
     'browserName': 'chrome'
   },
   directConnect: true,
-  baseUrl: 'http://localhost:4200/',
+  baseUrl: 'http://localhost:10135/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,

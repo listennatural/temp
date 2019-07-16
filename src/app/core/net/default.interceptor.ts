@@ -8,7 +8,7 @@ import {
   HttpEvent,
   HttpResponseBase,
 } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError, from } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
 import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
@@ -62,7 +62,9 @@ export class DefaultInterceptor implements HttpInterceptor {
     if (ev.status > 0) {
       this.injector.get(_HttpClient).end();
     }
+
     this.checkStatus(ev);
+
     // 业务处理：一些通用操作
     switch (ev.status) {
       case 200:
@@ -110,11 +112,24 @@ export class DefaultInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // 统一加上服务端前缀
     let url = req.url;
+
+    // 如果请求你开头是 assets,表示请求本地资源
+    if (url.startsWith("assets/")) {
+      url = "http://localhost:4200/" + url;
+    }
+
     if (!url.startsWith('https://') && !url.startsWith('http://')) {
+      // 链接开头添加/
+      if (!url.startsWith("/")) {
+        url = "/" + url;
+      }
       url = environment.SERVER_URL + url;
     }
 
     const newReq = req.clone({ url });
+
+    console.log(req);
+
     return next.handle(newReq).pipe(
       mergeMap((event: any) => {
         // 允许统一对请求错误处理

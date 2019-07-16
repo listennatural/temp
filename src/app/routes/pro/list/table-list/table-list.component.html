@@ -14,13 +14,7 @@
         <nz-form-item>
           <nz-form-label nzFor="status">使用状态</nz-form-label>
           <nz-form-control>
-            <nz-select
-              [(ngModel)]="q.status"
-              name="status"
-              id="status"
-              [nzPlaceHolder]="'请选择'"
-              [nzShowSearch]="true"
-            >
+            <nz-select [(ngModel)]="q.status" name="status" id="status" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true">
               <nz-option *ngFor="let i of status; let idx = index" [nzLabel]="i.text" [nzValue]="idx"></nz-option>
             </nz-select>
           </nz-form-control>
@@ -97,7 +91,7 @@
       </ng-template>
     </nz-alert>
   </div>
-  <st #st [columns]="columns" [data]="data" [loading]="loading" (change)="stChange($event)">
+  <st #st [columns]="columns" [data]="data" [loading]="loading" (change)="stChange($event)" [total]="total">
     <ng-template st-row="status" let-i>
       <nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge>
     </ng-template>

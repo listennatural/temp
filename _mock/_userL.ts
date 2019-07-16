@@ -46,10 +46,13 @@ function getRule(params: any) {
 }
 
 export const USERLS = {
-  'POST /lt/user/list': (req: MockRequest) => {
-    console.log("==========");
-    console.log(req.queryString);
+  // 'POST /lt/user/list': (req: MockRequest) => {
+  //   console.log("==========");
+  //   console.log(req.queryString);
 
-    return getRule(req.queryString)
-  },
+  //   return {
+  //     rows: getRule(req.queryString),
+  //     total: 200,
+  //   }
+  // },
 };

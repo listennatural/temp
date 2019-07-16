@@ -19,15 +19,10 @@ export class ProTableListComponent implements OnInit {
   };
   data: any[] = [];
   loading = false;
+  total = 200;
   status = [
     { index: 0, text: '关闭', value: false, type: 'default', checked: false },
-    {
-      index: 1,
-      text: '运行中',
-      value: false,
-      type: 'processing',
-      checked: false,
-    },
+    { index: 1, text: '运行中', value: false, type: 'processing', checked: false, },
     { index: 2, text: '已上线', value: false, type: 'success', checked: false },
     { index: 3, text: '异常', value: false, type: 'error', checked: false },
   ];
@@ -85,7 +80,7 @@ export class ProTableListComponent implements OnInit {
     public msg: NzMessageService,
     private modalSrv: NzModalService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getData();
@@ -112,6 +107,7 @@ export class ProTableListComponent implements OnInit {
       )
       .subscribe(res => {
         this.data = res;
+        this.total = 2233;
         this.cdr.detectChanges();
       });
   }

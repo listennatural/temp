@@ -75,7 +75,11 @@ const GLOBAL_CONFIG_PROVIDES = [
 // #endregion
 
 @NgModule({
-  imports: [AlainThemeModule.forRoot(), DelonACLModule.forRoot(), ...MOCK_MODULES],
+  imports: [
+    AlainThemeModule.forRoot(),
+    DelonACLModule.forRoot(),
+    ...MOCK_MODULES
+  ],
 })
 export class DelonModule {
   constructor(@Optional() @SkipSelf() parentModule: DelonModule) {
