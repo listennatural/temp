@@ -3,6 +3,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { tap, map } from 'rxjs/operators';
 import { STComponent, STColumn, STData, STChange, STReq, STRequestOptions, STRes, STPage } from '@delon/abc';
+import { HttpHeaders } from '@angular/common/http';
 
 /**
  * 新建的 component  必须在app.module.ts 中引入 然后 放入 @NgModule 中的 imports 数组中,
@@ -16,7 +17,7 @@ import { STComponent, STColumn, STData, STChange, STReq, STRequestOptions, STRes
 })
 export class UserListComponent implements OnInit {
   // 请求链接
-  url = 'api/user/list';
+  url = 'user/list';
   // 是否展示加载中
   loading = false;
   // 延迟加载时间
@@ -52,6 +53,7 @@ export class UserListComponent implements OnInit {
 
   // 请求配置
   reqParams: STReq = {
+    // headers: (new HttpHeaders()).set("token", "WA_TOKENk071lhnxfM81HA0Diw8d78j2").set("Token", "WA_TOKENk071lhnxfM81HA0Diw8d78j2"),
     // 修改参数名,使其符合后台要求规范
     reName: {
       pi: "pageNum",

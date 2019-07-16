@@ -1,0 +1,11 @@
+// {
+//     "logLevel": "debug",
+//     "/api": {
+//         "target": "https://127.0.0.1:7448",
+//         "secure": "false",
+//         "changeOrigin": true,
+//         "pathRewrite": {
+//             "^/api": ""
+//         }
+//     }
+// }

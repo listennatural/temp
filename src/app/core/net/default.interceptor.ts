@@ -7,6 +7,8 @@ import {
   HttpErrorResponse,
   HttpEvent,
   HttpResponseBase,
+  HttpHeaders,
+  HttpParams,
 } from '@angular/common/http';
 import { Observable, of, throwError, from } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
@@ -89,7 +91,8 @@ export class DefaultInterceptor implements HttpInterceptor {
         // }
         break;
       case 401:
-        this.notification.error(`未登录或登录已过期，请重新登录。`, ``);
+        // this.notification.error(`未登录或登录已过期，请重新登录。`, ``);
+        this.notification.error(CODEMESSAGE[401], '');
         // 清空 token 信息
         (this.injector.get(DA_SERVICE_TOKEN) as ITokenService).clear();
         this.goTo('/passport/login');
@@ -115,22 +118,44 @@ export class DefaultInterceptor implements HttpInterceptor {
 
     // 如果请求你开头是 assets,表示请求本地资源
     if (url.startsWith("assets/")) {
-      url = "http://localhost:4200/" + url;
-    }
-
-    if (!url.startsWith('https://') && !url.startsWith('http://')) {
-      // 链接开头添加/
-      if (!url.startsWith("/")) {
-        url = "/" + url;
-      }
+      url = "/" + url;
+    } else if (!url.startsWith('https://') && !url.startsWith('http://')) {
+      // 补全请求链接
+      url = url.startsWith("/") ? url : "/" + url;
       url = environment.SERVER_URL + url;
     }
 
-    const newReq = req.clone({ url });
+    // 获取原有请求头
+    let headers = req.headers;
+    const body = req.body || {};
+    // 获取原有参数,在设置timestamp参数
+    const params = (req.params || new HttpParams()).set("timestamp", (new Date()).valueOf() + "");
 
-    console.log(req);
+    // 如果是post请求
+    if (req.method.toLowerCase() === "post") {
+      // 设置请求头
+      headers = headers.set("content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+    }
 
-    return next.handle(newReq).pipe(
+    console.log("===========");
+    console.log(body);
+    console.log(params);
+    console.log(headers);
+    console.log("-----------");
+
+
+    // 在请求头中设置token
+    // if (url.indexOf("_allow_anonymous") === -1) {
+    //   console.log(url);
+    //   console.log("token");
+    //   headers = headers.set("token", (this.injector.get(DA_SERVICE_TOKEN) as ITokenService).get().token || "");
+    //   headers = headers.set("Token", (this.injector.get(DA_SERVICE_TOKEN) as ITokenService).get().token || "");
+    // }
+
+    console.log(headers);
+    const request = req.clone({ url, headers, body, params });
+
+    return next.handle(request).pipe(
       mergeMap((event: any) => {
         // 允许统一对请求错误处理
         if (event instanceof HttpResponseBase) return this.handleData(event);
