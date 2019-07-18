@@ -4,6 +4,7 @@ import { _HttpClient } from '@delon/theme';
 import { tap, map } from 'rxjs/operators';
 import { STComponent, STColumn, STData, STChange, STReq, STRequestOptions, STRes, STPage } from '@delon/abc';
 import { HttpHeaders } from '@angular/common/http';
+import { tmpdir } from 'os';
 
 /**
  * 新建的 component  必须在app.module.ts 中引入 然后 放入 @NgModule 中的 imports 数组中,
@@ -16,6 +17,12 @@ import { HttpHeaders } from '@angular/common/http';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserListComponent implements OnInit {
+  constructor(
+    private http: _HttpClient,
+    public msg: NzMessageService,
+    private modalSrv: NzModalService,
+    private cdr: ChangeDetectorRef,
+  ) { }
   // 请求链接
   url = 'user/list';
   // 是否展示加载中
@@ -23,11 +30,21 @@ export class UserListComponent implements OnInit {
   // 延迟加载时间
   loadingDelay = 500;
   // 搜索菜单是否展开
-  expandForm = false;
+  expandForm = true;
   // 当前页
-  pi = 0;
+  pi = 1;
   // 每页数量
   ps = 10;
+  // 用于动态获取 status 的keys
+  objKeys = Object.keys;
+  // 存放已选中数据
+  selectedRows = [];
+  // 是否展示抽屉
+  drawerVisible = false;
+  // 抽屉数据
+  drawerData = {};
+  // 抽屉是否为加载态
+  drawerLoading = false;
 
   // 请求携带参数
   params = {
@@ -35,10 +52,18 @@ export class UserListComponent implements OnInit {
     orderByColumn: "createtime",
     // 后台要求参数,排序方式 desc asc
     isAsc: "desc",
+    condition: '{}',
     sorter: '',
-    status: null,
     statusList: [],
   };
+
+  // 额外参数
+  condition=  {
+    nickname: "",
+    role: 0,
+    status: 0,
+    register: 0,
+  }
 
   // 分页配置
   pages: STPage = {
@@ -48,12 +73,12 @@ export class UserListComponent implements OnInit {
     // 显示分页
     show: true,
     showSize: true,
-    zeroIndexed: true,
+    // 页面以0开始
+    // zeroIndexed: true,
   };
 
   // 请求配置
   reqParams: STReq = {
-    // headers: (new HttpHeaders()).set("token", "WA_TOKENk071lhnxfM81HA0Diw8d78j2").set("Token", "WA_TOKENk071lhnxfM81HA0Diw8d78j2"),
     // 修改参数名,使其符合后台要求规范
     reName: {
       pi: "pageNum",
@@ -65,6 +90,11 @@ export class UserListComponent implements OnInit {
     process: (requestOptions: STRequestOptions) => {
       // 加载中
       this.loading = true;
+      // 重新设置参数
+      const p: any = requestOptions.params;
+      p.condition = JSON.stringify(this.condition);
+
+      requestOptions.params = p;
       return requestOptions;
     },
   };
@@ -80,19 +110,9 @@ export class UserListComponent implements OnInit {
       // 取消加载
       this.loading = false;
 
-      data = data.filter((val: any, i: number) => {
-        if (i < 10) {
-          return true;
-        }
-        return false;
-      });
-
       // 设定数据
       data = data.map((i: any) => {
-        const statusItem = this.status[i.status];
-        i.statusText = statusItem.text;
-        i.statusType = statusItem.type;
-        return i;
+        return this.showData(i);
       })
 
       this.cdr.detectChanges();
@@ -101,50 +121,80 @@ export class UserListComponent implements OnInit {
   };
 
   // 状态值配置
-  status = [
-    { index: 0, text: '关闭', value: false, type: 'default', checked: false },
-    { index: 1, text: '运行中', value: false, type: 'processing', checked: false, },
-    { index: 2, text: '已上线', value: false, type: 'success', checked: false },
-    { index: 3, text: '关闭', value: false, type: 'warning', checked: false },
-    { index: 4, text: '异常', value: false, type: 'error', checked: false },
-    { index: 5, text: '未知', value: false, type: 'error', checked: false },
-  ];
+  status = {
+    "1": { text: "正常", type: "#108ee9", checked: false },
+    "-1": { text: "注销", type: "#f50", checked: false },
+    "-2": { text: "冻结", type: "purple", checked: false },
+    "-3": { text: "删除", type: "red", checked: false },
+  };
+
+  // 注册值配置
+  register = {
+    "-1": { text: "内部添加", type: "#108ee9", checked: false },
+    "1": { text: "手机号码", type: "#2db7f5", checked: false },
+    "2": { text: "微信", type: "gold", checked: false },
+    "3": { text: "QQ", type: "geekblue", checked: false },
+    "4": { text: "新浪微博", type: "cyan", checked: false },
+    "5": { text: "支付宝", type: "magenta", checked: false },
+  };
+
+  // 角色值
+  role = {
+    "1": { text: "教师", type: "#2db7f5", checked: false },
+    "2": { text: "学员", type: "#87d068", checked: false },
+  };
+
+  // 来源值
+  source = {
+    "1": { text: "官方APP", type: "#2db7f5", checked: false },
+  };
+
   // 列配置
   columns: STColumn[] = [
     { title: '', index: 'id', type: 'checkbox' },
-    { title: '头像', type: 'img', index: 'avatar' },
-    { title: '昵称', index: 'nickname' },
+    { title: '头像', index: 'avatar', render: "avatar" },
+    { title: '昵称', width: '30px', index: 'nickname' },
     { title: '联系方式', index: 'phone' },
     { title: '粉丝', index: 'fans' },
     { title: '知言币', index: 'coins' },
     { title: '积分', index: 'integral' },
-    {
-      title: '状态',
-      index: 'status',
-      render: 'status',
-      filter: {
-        menus: this.status,
-        fn: (filter: any, record: any) => record.status === filter.index,
-      },
-    },
-    { title: '注册方式', index: 'register' },
-    { title: '角色', index: 'role' },
-    { title: '来源', index: 'source' },
+    { title: '状态', index: 'status', render: 'status', },
+    { title: '注册方式', index: 'register', render: 'register' },
+    { title: '角色', index: 'role', render: 'role' },
+    { title: '来源', index: 'source', render: "source" },
     { title: '注册时间', type: 'date', index: 'createtime' },
   ];
 
   // 用来调用组件api
   @ViewChild('st', { static: false })
   st: STComponent;
-  constructor(
-    private http: _HttpClient,
-    public msg: NzMessageService,
-    private modalSrv: NzModalService,
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   // 页面初始化
   ngOnInit() {
+  }
+
+  // 配置单条数据,需要显示的各个值
+  showData(data: any) {
+    // 配置状态值
+    const statusItem = this.status[data.status];
+    data.statusText = statusItem.text;
+    data.statusType = statusItem.type;
+
+    // 配置注册值
+    const registerItem = this.register[data.register];
+    data.registerText = registerItem.text;
+    data.registerType = registerItem.type;
+
+    // 配置角色值
+    const roleItem = this.role[data.role];
+    data.roleText = roleItem.text;
+    data.roleType = roleItem.type;
+
+    // 配置来源值
+    const sourceItem = this.source[data.source];
+    data.sourceText = sourceItem.text;
+    data.sourceType = sourceItem.type;
+    return data;
   }
 
   // 重置
@@ -155,17 +205,51 @@ export class UserListComponent implements OnInit {
   // 搜索
   search() {
     console.log("搜索");
-
   }
 
   // 表格变化时触发
   change(e: STChange) {
-    console.log("change");
-    console.log(e);
-
+    switch (e.type) {
+      // 执行选中操作
+      case 'checkbox':
+        this.selectedRows = e.checkbox!;
+        break;
+      // 执行单击操作
+      case 'click':
+        this.drawerOpen(e.click.item);
+        break;
+      default:
+        // console.log("change");
+        // console.log(e);
+        break
+    }
   }
 
   // 新增
   add() {
+  }
+
+  // 打开右侧抽屉drawer
+  drawerOpen(data: any): void {
+    console.log(data);
+    this.drawerLoading = true;
+
+    this.drawerVisible = true;
+  }
+
+  // 关闭抽屉
+  drawerClose(): void {
+    this.drawerVisible = false;
+  }
+
+  // 提交抽屉中数据
+  drawerSubmit(): void {
+    // 如果数据正在加载
+    if (this.drawerLoading) {
+      this.msg.error(`数据正在加载,请稍后...`);
+    }
+
+    console.log('submit');
+
   }
 }

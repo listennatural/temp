@@ -6,20 +6,65 @@
     <div nz-row [nzGutter]="{ xs: 8, sm: 8, md: 8, lg: 24, xl: 48, xxl: 48 }">
       <div nz-col nzMd="8" nzSm="24">
         <nz-form-item>
-          <nz-form-label nzFor="status">使用状态</nz-form-label>
+          <nz-form-label nzFor="nickname">用户昵称</nz-form-label>
           <nz-form-control>
-            <nz-select [(ngModel)]="params.status" name="status" id="status" [nzPlaceHolder]="'请选择'"
+            <input nz-input id="nickname" [(ngModel)]="condition.nickname" [placeholder]="'请输入用户昵称'" type='text' />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="8" nzSm="24">
+        <nz-form-item>
+          <nz-form-label nzFor="phone">联系方式</nz-form-label>
+          <nz-form-control>
+            <nz-input-number [nzId]="'phone'" [nzPlaceHolder]="'请输入联系方式'" class="input-number">
+            </nz-input-number>
+            <!-- <input nz-input id="phone" [placeholder]="'请输入联系方式'" /> -->
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+        <nz-form-item>
+          <nz-form-label nzFor="role">用户角色</nz-form-label>
+          <nz-form-control>
+            <nz-select [(ngModel)]="condition.role" name="role" id="role" [nzPlaceHolder]="'请选择角色'"
               [nzShowSearch]="true">
-              <nz-option *ngFor="let i of status; let idx = index" [nzLabel]="i.text" [nzValue]="idx"></nz-option>
+              <nz-option *ngFor="let key of objKeys(role)" [nzLabel]="role[key].text" [nzValue]="key"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
         <nz-form-item>
-          <nz-form-label nzFor="callNo">调用次数</nz-form-label>
+          <nz-form-label nzFor="status">用户状态</nz-form-label>
           <nz-form-control>
-            <input nz-input id="callNo" />
+            <nz-select [(ngModel)]="condition.status" name="status" id="status" [nzPlaceHolder]="'请选择状态'"
+              [nzShowSearch]="true">
+              <nz-option *ngFor="let key of objKeys(status)" [nzLabel]="status[key].text" [nzValue]="key"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+        <nz-form-item>
+          <nz-form-label nzFor="register">用户来源</nz-form-label>
+          <nz-form-control>
+            <nz-select [(ngModel)]="condition.register" name="register" id="register" [nzPlaceHolder]="'请选择来源'"
+              [nzShowSearch]="true">
+              <nz-option *ngFor="let key of objKeys(register)" [nzLabel]="register[key].text" [nzValue]="key">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="12" nzSm="24" *ngIf="expandForm">
+        <nz-form-item>
+          <nz-form-label nzFor="">粉丝数量</nz-form-label>
+          <nz-form-control>
+            <nz-input-group nzCompact>
+              <input type="text" nz-input placeholder="Minimum" style="width:45%; text-align: center;" />
+              <input type="text" disabled nz-input placeholder="~" style="width: 20px; border-left: 0px; pointer-events: none; background-color: LightSlateGray;"/>
+              <input type="text" nz-input placeholder="Maximum" style="width: 45%; text-align: center; border-left: 0px;" />
+            </nz-input-group>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -27,26 +72,6 @@
         <nz-form-item>
           <nz-form-label nzFor="updatedAt">更新日期</nz-form-label>
           <nz-form-control> </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
-        <nz-form-item>
-          <nz-form-label nzFor="status2">使用状态</nz-form-label>
-          <nz-form-control>
-            <nz-select [nzPlaceHolder]="'请选择'" nzId="status2" [nzShowSearch]="true">
-              <nz-option *ngFor="let i of status; let idx = index" [nzLabel]="i.text" [nzValue]="idx"></nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
-        <nz-form-item>
-          <nz-form-label nzFor="status3">使用状态</nz-form-label>
-          <nz-form-control>
-            <nz-select [nzPlaceHolder]="'请选择'" nzId="status3" [nzShowSearch]="true">
-              <nz-option *ngFor="let i of status; let idx = index" [nzLabel]="i.text" [nzValue]="idx"></nz-option>
-            </nz-select>
-          </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm">
@@ -64,11 +89,114 @@
     <i nz-icon nzType="plus"></i>
     <span>新建</span>
   </button>
+  <!-- 选中信息统计 -->
+  <div class="my-md">
+    <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzMessage]="message">
+      <ng-template #message>
+        已选择
+        <strong class="text-primary">{{ selectedRows.length }}</strong> 条数据&nbsp;&nbsp;
+        <a *ngIf="selectedRows.length > 0" (click)="st.clearCheck()" class="ml-lg">清空</a>
+      </ng-template>
+    </nz-alert>
+  </div>
   <!-- 列表 -->
   <st #st (change)="change($event)" [data]="url" [req]="reqParams" [res]="resParams" [loading]="loading"
     [loadingDelay]="loadingDelay" [columns]="columns" [ps]="ps" [pi]="pi" [page]="pages">
     <ng-template st-row="status" let-i>
-      <nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge>
+      <nz-tag [nzColor]="i.statusType">{{i.statusText}}</nz-tag>
+    </ng-template>
+    <ng-template st-row="register" let-i>
+      <nz-tag [nzColor]="i.registerType">{{i.registerText}}</nz-tag>
+    </ng-template>
+    <ng-template st-row="role" let-i>
+      <nz-tag [nzColor]="i.roleType">{{i.roleText}}</nz-tag>
+    </ng-template>
+    <ng-template st-row="source" let-i>
+      <nz-tag [nzColor]="i.sourceType">{{i.sourceText}}</nz-tag>
+    </ng-template>
+    <ng-template st-row="avatar" let-i>
+      <nz-avatar class="alain-default__aside-user-avatar" [nzSrc]="i.avatar"></nz-avatar>
     </ng-template>
   </st>
 </nz-card>
+
+<!-- 表格数据单击展示模块 -->
+<nz-drawer [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+  [nzMaskClosable]="false" [nzWidth]="720" [nzVisible]="drawerVisible" nzTitle="数据详情" (nzOnClose)="drawerClose()">
+  <nz-skeleton [nzLoading]="drawerLoading">
+    <form nz-form>
+      <div nz-row nzGutter="8">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>Name</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="please enter user name" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>Url</nz-form-label>
+            <nz-form-control>
+              <nz-input-group nzAddOnBefore="http://" nzAddOnAfter=".com">
+                <input type="text" nz-input placeholder="please enter url" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row nzGutter="8">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>Owner</nz-form-label>
+            <nz-form-control>
+              <nz-select nzPlaceHolder="Please select an owner"></nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>Type</nz-form-label>
+            <nz-form-control>
+              <nz-select nzPlaceHolder="Please choose the type"></nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row nzGutter="8">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>Approver</nz-form-label>
+            <nz-form-control>
+              <nz-select nzPlaceHolder="Please choose the approver"></nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>DateTime</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row nzGutter="8">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Description</nz-form-label>
+            <nz-form-control>
+              <textarea nz-input placeholder="please enter url description"
+                [nzAutosize]="{ minRows: 4, maxRows: 4 }"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-skeleton>
+  <div class="footer">
+    <button type="button" (click)="drawerClose()" class="ant-btn"
+      style="margin-right: 8px;"><span>Cancel</span></button>
+    <button type="button" (click)="drawerSubmit()" class="ant-btn ant-btn-primary"><span>Submit</span></button>
+  </div>
+</nz-drawer>

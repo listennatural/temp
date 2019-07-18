@@ -23,8 +23,8 @@ const CODEMESSAGE = {
   202: '一个请求已经进入后台排队（异步任务）。',
   204: '删除数据成功。',
   400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
-  401: '用户没有权限（令牌、用户名、密码错误）,如您已得到授权,请重新登录!',
-  403: '用户得到授权，但是访问是被禁止的。',
+  401: '用户状态异常（令牌、用户名、密码错误）!',
+  403: '用户没有权限,如您已得到授权,请重新登录!',
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
   406: '请求的格式不可得。',
   410: '请求的资源被永久删除，且不会再得到的。',
@@ -91,20 +91,24 @@ export class DefaultInterceptor implements HttpInterceptor {
         // }
         break;
       case 401:
+        // 用户状态异常,需重新登录
         this.notification.error(CODEMESSAGE[401], '');
         // 清空 token 信息
-        // (this.injector.get(DA_SERVICE_TOKEN) as ITokenService).clear();
-        // 跳转到首页
-        this.goTo('/');
+        (this.injector.get(DA_SERVICE_TOKEN) as ITokenService).clear();
+        // 跳转到登录页
+        this.goTo('/passport/login');
         break;
       case 403:
+        // 权限异常,跳转到首页
+        this.goTo('/');
+        break;
       case 404:
       case 500:
         this.goTo(`/exception/${ev.status}`);
         break;
       default:
         if (ev instanceof HttpErrorResponse) {
-          console.warn('未可知错误，大部分是由于后端不支持CORS或无效配置引起', ev);
+          // console.warn('未可知错误，大部分是由于后端不支持CORS或无效配置引起', ev);
           return throwError(ev);
         }
         break;
