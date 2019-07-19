@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Inject, LOCALE_ID } from '@angular/core';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { tap, map } from 'rxjs/operators';
 import { STComponent, STColumn, STData, STChange, STReq, STRequestOptions, STRes, STPage } from '@delon/abc';
 import { HttpHeaders } from '@angular/common/http';
 import { tmpdir } from 'os';
+import { formatDate } from '@angular/common';
 
 /**
  * 新建的 component  必须在app.module.ts 中引入 然后 放入 @NgModule 中的 imports 数组中,
@@ -22,6 +23,7 @@ export class UserListComponent implements OnInit {
     public msg: NzMessageService,
     private modalSrv: NzModalService,
     private cdr: ChangeDetectorRef,
+    @Inject(LOCALE_ID) private locale: string,
   ) { }
   // 请求链接
   url = 'user/list';
@@ -58,11 +60,17 @@ export class UserListComponent implements OnInit {
   };
 
   // 额外参数
-  condition=  {
+  condition: any = {
     nickname: "",
+    phone: "",
     role: 0,
     status: 0,
     register: 0,
+    minFans: 0,
+    maxFans: 0,
+    timeRange: [],
+    beginTime: "",
+    endTime: "",
   }
 
   // 分页配置
@@ -92,7 +100,14 @@ export class UserListComponent implements OnInit {
       this.loading = true;
       // 重新设置参数
       const p: any = requestOptions.params;
-      p.condition = JSON.stringify(this.condition);
+
+      // 设置开始结束时间
+      if (this.condition.timeRange.length > 0) {
+        this.condition.beginTime = formatDate(this.condition.timeRange[0], "yyyy-MM-dd", this.locale);
+        this.condition.endTime = formatDate(this.condition.timeRange[1], "yyyy-MM-dd", this.locale);
+      }
+
+      p.condition = JSON.stringify(this.condition).replace(/null/g, '""');
 
       requestOptions.params = p;
       return requestOptions;
@@ -199,12 +214,19 @@ export class UserListComponent implements OnInit {
 
   // 重置
   reset() {
-    setTimeout(() => this.st.reload());
+    this.pi = 1;
+    this.ps = 10;
+    // this.st.clear();
+    this.st.load(this.pi, this.params);
   }
 
   // 搜索
   search() {
-    console.log("搜索");
+    setTimeout(() => {
+      console.log("搜索");
+      console.log(this.condition);
+      this.st.reload()
+    });
   }
 
   // 表格变化时触发
@@ -219,8 +241,6 @@ export class UserListComponent implements OnInit {
         this.drawerOpen(e.click.item);
         break;
       default:
-        // console.log("change");
-        // console.log(e);
         break
     }
   }

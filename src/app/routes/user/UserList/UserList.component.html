@@ -8,7 +8,8 @@
         <nz-form-item>
           <nz-form-label nzFor="nickname">用户昵称</nz-form-label>
           <nz-form-control>
-            <input nz-input id="nickname" [(ngModel)]="condition.nickname" [placeholder]="'请输入用户昵称'" type='text' />
+            <input nz-input id="nickname" [(ngModel)]="condition.nickname" name="nickname" [placeholder]="'请输入用户昵称'"
+              type='text' />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -16,9 +17,8 @@
         <nz-form-item>
           <nz-form-label nzFor="phone">联系方式</nz-form-label>
           <nz-form-control>
-            <nz-input-number [nzId]="'phone'" [nzPlaceHolder]="'请输入联系方式'" class="input-number">
-            </nz-input-number>
-            <!-- <input nz-input id="phone" [placeholder]="'请输入联系方式'" /> -->
+            <input nz-input type="number" min="1" id="phone" [(ngModel)]="condition.phone" name="phone"
+              [placeholder]="'请输入联系方式'" />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -61,17 +61,23 @@
           <nz-form-label nzFor="">粉丝数量</nz-form-label>
           <nz-form-control>
             <nz-input-group nzCompact>
-              <input type="text" nz-input placeholder="Minimum" style="width:45%; text-align: center;" />
-              <input type="text" disabled nz-input placeholder="~" style="width: 20px; border-left: 0px; pointer-events: none; background-color: LightSlateGray;"/>
-              <input type="text" nz-input placeholder="Maximum" style="width: 45%; text-align: center; border-left: 0px;" />
+              <input type="number" id="minFans" [(ngModel)]="condition.minFans" name="minFans" nz-input
+                placeholder="最小值" style="width:45%; text-align: center;" />
+              <input type="text" disabled nz-input placeholder="~"
+                style="width: 20px; border-left: 0px; pointer-events: none; background-color: LightSlateGray;" />
+              <input type="number" id="maxFans" [(ngModel)]="condition.maxFans" name="maxFans" nz-input
+                placeholder="最大值" style="width: 45%; text-align: center; border-left: 0px;" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+      <div nz-col nzMd="12" nzSm="24" *ngIf="expandForm">
         <nz-form-item>
-          <nz-form-label nzFor="updatedAt">更新日期</nz-form-label>
-          <nz-form-control> </nz-form-control>
+          <nz-form-label nzFor="createtimeRange">注册时间</nz-form-label>
+          <nz-form-control>
+            <nz-range-picker id="createtimeRange" name="createtimeRange" [(ngModel)]="condition.timeRange">
+            </nz-range-picker>
+          </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm">

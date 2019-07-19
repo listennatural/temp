@@ -1,7 +1,7 @@
 import { MockRequest } from '@delon/mock';
 
 const list: any[] = [];
-const total = 50;
+const total = 10;
 const random = (i: number) => {
   return (Math.floor((Math.random()) * 10) % i);
 }
@@ -46,10 +46,7 @@ function getRule(params: any) {
 }
 
 export const USERLS = {
-  // 'POST /lt/user/list': (req: MockRequest) => {
-  //   console.log("==========");
-  //   console.log(req.queryString);
-
+  // 'POST /api/user/list': (req: MockRequest) => {
   //   return {
   //     rows: getRule(req.queryString),
   //     total: 200,
